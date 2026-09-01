@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FB Downloader Pro</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fab fa-facebook"></i>
+                <h2>FB Downloader</h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="active" onclick="showSection('overview')">
+                    <i class="fas fa-home"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" onclick="showSection('history')">
+                    <i class="fas fa-history"></i>
+                    <span>Download History</span>
+                </a>
+                <a href="#" onclick="showSection('api')">
+                    <i class="fas fa-key"></i>
+                    <span>API Keys</span>
+                </a>
+                <a href="#" onclick="showSection('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#" onclick="showSection('premium')">
+                    <i class="fas fa-crown"></i>
+                    <span>Premium</span>
+                </a>
+                <a href="#" onclick="showSection('notifications')">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="/" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <h1 id="sectionTitle">Overview</h1>
+                <div class="user-info">
+                    <span id="userName">User</span>
+                    <img id="userAvatar" src="/images/avatar.png" alt="User">
+                </div>
+            </header>
+            
+            <!-- Overview Section -->
+            <section id="overview" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-download"></i>
+                        <div>
+                            <h3 id="totalDownloads">0</h3>
+                            <p>Total Downloads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-video"></i>
+                        <div>
+                            <h3 id="videoDownloads">0</h3>
+                            <p>Video Downloads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-music"></i>
+                        <div>
+                            <h3 id="audioDownloads">0</h3>
+                            <p>Audio Downloads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-crown"></i>
+                        <div>
+                            <h3 id="premiumStatus">Free</h3>
+                            <p>Account Type</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Download -->
+                <div class="quick-download">
+                    <h2>Quick Download</h2>
+                    <div class="input-group">
+                        <input type="url" id="quickUrl" placeholder="Paste Facebook URL...">
+                        <button onclick="quickDownload()">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- History Section -->
+            <section id="history" class="content-section">
+                <h2>Download History</h2>
+                <div id="historyList" class="history-list">
+                    <!-- History items will be loaded here -->
+                </div>
+            </section>
+            
+            <!-- API Section -->
+            <section id="api" class="content-section">
+                <h2>API Keys</h2>
+                <div class="api-key-box">
+                    <label>Your API Key:</label>
+                    <div class="api-key-display">
+                        <code id="apiKey">Loading...</code>
+                        <button onclick="copyApiKey()">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" onclick="regenerateApiKey()">
+                        <i class="fas fa-refresh"></i> Regenerate
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Profile Section -->
+            <section id="profile" class="content-section">
+                <h2>Profile Settings</h2>
+                <form id="profileForm" onsubmit="updateProfile(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="profileUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="profileEmail" disabled>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </section>
+            
+            <!-- Premium Section -->
+            <section id="premium" class="content-section">
+                <h2>Premium Plans</h2>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>Monthly</h3>
+                        <p class="price">$9.99<span>/month</span></p>
+                        <ul>
+                            <li>✓ Unlimited Downloads</li>
+                            <li>✓ No Ads</li>
+                            <li>✓ Priority Support</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="upgradePremium('monthly')">Choose Monthly</button>
+                    </div>
+                    
+                    <div class="pricing-card featured">
+                        <h3>Yearly</h3>
+                        <p class="price">$99.99<span>/year</span></p>
+                        <ul>
+                            <li>✓ Everything in Monthly</li>
+                            <li>✓ Save 17%</li>
+                            <li>✓ Early Features</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="upgradePremium('yearly')">Choose Yearly</button>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <h3>Lifetime</h3>
+                        <p class="price">$299.99<span>/once</span></p>
+                        <ul>
+                            <li>✓ Everything in Yearly</li>
+                            <li>✓ Lifetime Access</li>
+                            <li>✓ VIP Support</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="upgradePremium('lifetime')">Choose Lifetime</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Notifications Section -->
+            <section id="notifications" class="content-section">
+                <h2>Notifications</h2>
+                <div id="notificationList" class="notification-list">
+                    <!-- Notifications will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
