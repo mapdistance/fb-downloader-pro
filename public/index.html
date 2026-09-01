@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Facebook Video Downloader - Free FB Video Download HD</title>
+    <meta name="description" content="Download Facebook videos, reels, and stories in HD quality. Free FB video downloader - Convert to MP3, MP4. Fast and easy to use.">
+    <meta name="keywords" content="facebook video downloader, fb video download, facebook reels downloader, fb story downloader, facebook mp3 converter">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="FB Downloader Pro">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Facebook Video Downloader - Download FB Videos Free">
+    <meta property="og:description" content="Free online Facebook video downloader. Download HD videos, reels, stories. Convert to MP3 audio.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://facebook-audio-converter.onrender.com">
+    <meta property="og:image" content="/images/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Facebook Video Downloader - Free">
+    <meta name="twitter:description" content="Download Facebook videos in HD quality for free.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "FB Downloader Pro",
+        "url": "https://facebook-audio-converter.onrender.com",
+        "description": "Download Facebook videos, reels, and stories in HD quality",
+        "applicationCategory": "MultimediaApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="/" class="logo">
+                        <i class="fab fa-facebook"></i>
+                        <span>FB Downloader <strong>Pro</strong></span>
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/" class="active">Home</a></li>
+                        <li><a href="/#features">Features</a></li>
+                        <li><a href="/#how-to">How To</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                        <li><a href="/about.html">About</a></li>
+                        <li><a href="/contact.html">Contact</a></li>
+                    </ul>
+                    
+                    <div class="nav-actions">
+                        <a href="/dashboard.html" class="btn btn-outline">Dashboard</a>
+                        <button class="btn btn-primary" onclick="showLoginModal()">Login</button>
+                    </div>
+                    
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Facebook Video <span>Downloader</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Download Facebook videos, reels, and stories in HD quality.
+                    Convert to MP3 audio. Free, fast, and easy to use.
+                </p>
+                
+                <!-- Download Box -->
+                <div class="download-box">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <input 
+                            type="url" 
+                            id="videoUrl" 
+                            class="url-input" 
+                            placeholder="Paste Facebook video URL here..."
+                            required
+                        >
+                        <button class="paste-btn" onclick="pasteFromClipboard()" title="Paste">
+                            <i class="fas fa-paste"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="options-group">
+                        <label class="option-label">
+                            <i class="fas fa-file-video"></i> Format:
+                        </label>
+                        <select id="formatSelect" class="format-select">
+                            <option value="video">Video (MP4)</option>
+                            <option value="audio">Audio (MP3)</option>
+                            <option value="thumbnail">Thumbnail (JPG)</option>
+                        </select>
+                        
+                        <label class="option-label quality-label">
+                            <i class="fas fa-sliders-h"></i> Quality:
+                        </label>
+                        <select id="qualitySelect" class="format-select">
+                            <option value="best">Best Quality</option>
+                            <option value="1080">1080p (Full HD)</option>
+                            <option value="720">720p (HD)</option>
+                            <option value="480">480p</option>
+                            <option value="360">360p</option>
+                        </select>
+                    </div>
+                    
+                    <button class="download-btn" onclick="downloadVideo()">
+                        <i class="fas fa-download"></i>
+                        <span>Download Now</span>
+                    </button>
+                    
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Processing your request...</p>
+                    </div>
+                    
+                    <div id="resultBox" class="result-box" style="display: none;">
+                        <div class="result-header">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>Download Ready!</h3>
+                        </div>
+                        <div id="videoInfo" class="video-info"></div>
+                        <a id="downloadLink" href="#" class="download-link" download>
+                            <i class="fas fa-download"></i>
+                            <span>Click to Download</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>100% Safe</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-bolt"></i>
+                        <span>Fast Download</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-hd"></i>
+                        <span>HD Quality</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-infinity"></i>
+                        <span>Unlimited</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Amazing Features</h2>
+            <p class="section-subtitle">Everything you need to download Facebook content</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>HD Video Download</h3>
+                    <p>Download videos in up to 4K quality. Support for all resolutions from 144p to 2160p.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>MP3 Conversion</h3>
+                    <p>Convert Facebook videos to high-quality MP3 audio. Perfect for music and podcasts.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <h3>Reels Downloader</h3>
+                    <p>Download Facebook Reels easily. Save short videos for offline viewing.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Story Saver</h3>
+                    <p>Save Facebook Stories before they expire. Never lose your favorite moments.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <h3>Thumbnail Download</h3>
+                    <p>Download video thumbnails in HD quality. Perfect for covers and previews.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3>Free Forever</h3>
+                    <p>No registration required. Unlimited downloads. Completely free to use.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How To Section -->
+    <section id="how-to" class="how-to">
+        <div class="container">
+            <h2 class="section-title">How to Download</h2>
+            <p class="section-subtitle">Follow these simple steps</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <i class="fas fa-copy"></i>
+                    <h3>Copy URL</h3>
+                    <p>Open Facebook and copy the video URL you want to download.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <i class="fas fa-paste"></i>
+                    <h3>Paste Link</h3>
+                    <p>Paste the URL in the input box above. Choose your format.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <i class="fas fa-download"></i>
+                    <h3>Download</h3>
+                    <p>Click download button. Your file will be ready in seconds!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Is this Facebook downloader free?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! Our Facebook video downloader is completely free. No registration required. Unlimited downloads.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I download HD videos?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutely! We support all quality options from 144p to 4K. Choose your preferred quality.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I convert to MP3?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Simply select "Audio (MP3)" from the format dropdown. We'll convert the video to high-quality MP3.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>FB Downloader Pro</h3>
+                    <p>Your ultimate Facebook video downloader. Fast, free, and reliable.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/#features">Features</a></li>
+                        <li><a href="/faq.html">FAQ</a></li>
+                        <li><a href="/about.html">About</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="/terms-of-service.html">Terms of Service</a></li>
+                        <li><a href="/contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 FB Downloader Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm" onsubmit="login(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            <p class="modal-footer">
+                Don't have an account? <a href="#" onclick="showRegister()">Register</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeRegisterModal()">&times;</span>
+            <h2>Register</h2>
+            <form id="registerForm" onsubmit="register(event)">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+            <p class="modal-footer">
+                Already have an account? <a href="#" onclick="showLogin()">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
