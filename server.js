@@ -10,6 +10,9 @@ const path = require('path');
 const fs = require('fs-extra');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 const { 
   initDatabase, 
@@ -31,10 +34,7 @@ const {
 } = require('./auth');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Initialize database
-initDatabase();
+const PORT = process.env.PORT || 10000;
 
 // Middleware
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -64,8 +64,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const TEMP_DIR = path.join(__dirname, 'temp');
 fs.ensureDirSync(TEMP_DIR);
 
-// yt-dlp path
-const YTDLP_PATH = path.join(__dirname, 'bin', process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
+// yt-dlp path (Render.com-এ pip install হয়)
+const YTDLP_PATH = 'yt-dlp'; // Use system PATH
 
 // Cleanup job
 setInterval(async () => {
@@ -90,7 +90,8 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    version: '1.0.0'
+    version: '1.0.1',
+    database: 'connected'
   });
 });
 
@@ -115,7 +116,7 @@ app.post('/api/register', authLimiter, async (req, res) => {
       });
     }
     
-    const existingUser = await findUserByEmail(email);
+    const existingUser = findUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ 
         success: false,
@@ -124,7 +125,7 @@ app.post('/api/register', authLimiter, async (req, res) => {
       });
     }
     
-    const user = await createUser({ username, email, password });
+    const user = createUser({ username, email, password });
     const token = generateToken(user);
     
     res.json({
@@ -159,7 +160,7 @@ app.post('/api/login', authLimiter, async (req, res) => {
       });
     }
     
-    const user = await findUserByEmail(email);
+    const user = findUserByEmail(email);
     if (!user) {
       return res.status(401).json({ 
         success: false,
@@ -232,10 +233,6 @@ app.post('/api/download-video', optionalAuth, apiLimiter, async (req, res) => {
     
     const format = formatMap[quality] || 'best';
     
-    const { exec } = require('child_process');
-    const util = require('util');
-    const execPromise = util.promisify(exec);
-    
     await execPromise(`"${YTDLP_PATH}" -f "${format}" -o "${outputPath}" --no-warnings "${url}"`, {
       timeout: 300000,
       maxBuffer: 1024 * 1024 * 10
@@ -248,7 +245,7 @@ app.post('/api/download-video', optionalAuth, apiLimiter, async (req, res) => {
     const downloadUrl = `/api/download/${conversionId}`;
     
     if (req.user) {
-      await addDownloadHistory(req.user.id, { 
+      addDownloadHistory(req.user.id, { 
         url, 
         type: 'video', 
         format: 'mp4', 
@@ -288,10 +285,6 @@ app.post('/api/convert-audio', optionalAuth, apiLimiter, async (req, res) => {
     const conversionId = uuidv4();
     const outputPath = path.join(TEMP_DIR, `${conversionId}.${format}`);
     
-    const { exec } = require('child_process');
-    const util = require('util');
-    const execPromise = util.promisify(exec);
-    
     await execPromise(`"${YTDLP_PATH}" -x --audio-format ${format} --audio-quality ${quality} -o "${outputPath}" --no-warnings "${url}"`, {
       timeout: 300000,
       maxBuffer: 1024 * 1024 * 10
@@ -304,7 +297,7 @@ app.post('/api/convert-audio', optionalAuth, apiLimiter, async (req, res) => {
     const downloadUrl = `/api/download/${conversionId}`;
     
     if (req.user) {
-      await addDownloadHistory(req.user.id, { 
+      addDownloadHistory(req.user.id, { 
         url, 
         type: 'audio', 
         format, 
@@ -334,7 +327,7 @@ app.get('/api/history', verifyToken, async (req, res) => {
   try {
     const { limit = 20, offset = 0 } = req.query;
     
-    const history = await getDownloadHistory(req.user.id, parseInt(limit), parseInt(offset));
+    const history = getDownloadHistory(req.user.id, parseInt(limit), parseInt(offset));
     
     res.json({ 
       success: true, 
@@ -378,7 +371,7 @@ app.get('/api/download/:id', async (req, res) => {
 // ===== ADMIN ROUTES =====
 app.get('/api/admin/stats', verifyToken, requireAdmin, async (req, res) => {
   try {
-    const stats = await getStats();
+    const stats = getStats();
     res.json({ success: true, stats });
   } catch (error) {
     res.status(500).json({ 
@@ -414,14 +407,29 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`
+async function startServer() {
+  try {
+    // Initialize database first
+    initDatabase();
+    console.log('✅ Database ready');
+    
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`
 ╔════════════════════════════════════════════╗
-║     🚀 FB Downloader Pro v1.0.0            ║
+║     🚀 FB Downloader Pro v1.0.1            ║
 ║     ✅ Server running on port ${PORT}         ║
-║     📚 API docs available                   ║
-║     💾 Database: SQLite                     ║
+║     💾 Database: SQLite (Ready)            ║
 ║     🔒 Security: Enabled                    ║
 ╚════════════════════════════════════════════╝
-  `);
-});
+      `);
+    });
+    
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+startServer();
