@@ -1,7 +1,7 @@
 {
   "name": "fb-downloader-pro",
-  "version": "1.0.0",
-  "description": "Facebook Video Downloader - Download FB videos, reels, stories in HD quality",
+  "version": "1.0.1",
+  "description": "Facebook Video Downloader Pro - Download FB videos, reels, stories in HD quality",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -28,14 +28,11 @@
     "axios": "^1.6.2",
     "uuid": "^9.0.1",
     "fs-extra": "^11.2.0",
-    "ffmpeg-static": "^5.2.0",
-    "sqlite3": "^5.1.7",
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
-    "qrcode": "^1.5.3",
     "morgan": "^1.10.0",
     "dotenv": "^16.3.1",
-    "node-cron": "^3.0.3"
+    "better-sqlite3": "^11.3.0"
   },
   "engines": {
     "node": ">=18.0.0"
